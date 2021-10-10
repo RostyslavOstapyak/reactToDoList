@@ -13,7 +13,7 @@ functional:
 - drag and drop to change order inside table
 
 used:
-webpack
-babel
-scss
-react
+- webpack - for put all things together
+- babel - to transpile jsx to js
+- scss - some basic styles (this one was not about styles)
+- react - this was main goal to train with
