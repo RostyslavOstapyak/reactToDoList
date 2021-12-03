@@ -1,8 +1,8 @@
 import React from "react";
 
 const CreateItem = ({
-  inputValue,
-  onChangeInput,
+  value,
+  onChange,
   onCreateItem,
   title,
   buttonText,
@@ -12,8 +12,8 @@ const CreateItem = ({
     <input
       type="text"
       className="create-task-form__input"
-      value={inputValue}
-      onChange={onChangeInput}
+      value={value}
+      onChange={onChange}
     />
     <button className="create-task-form__button" onClick={onCreateItem}>
       {buttonText}
