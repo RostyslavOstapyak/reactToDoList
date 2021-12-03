@@ -1,47 +1,61 @@
 /* eslint-disable no-param-reassign */
-import React from 'react';
-import './index.scss';
-import CreateTask from './createTask/CreateTask';
-import TasksTable from './tasksTable/TasksTable';
-import UserTables from './userTables/UserTables';
-import CreateTable from './createTable/CreateTable';
+import React from "react";
+import "./index.scss";
+import TasksTable from "./tasksTable/TasksTable";
+import UserTables from "./userTables/UserTables";
+import CreateItem from "./createItem/CreateItem";
 
 class App extends React.Component {
   state = {
-    inputValue: '',
-    newTableName: '',
+    inputValue: "",
+    newTableName: "",
     tables: [
       {
         id: 0,
-        tableTitle: '0',
+        tableTitle: "0",
         tableContent: [
-          { id: 0, text: 'task1', order: 0, table: '0' },
-          { id: 1, text: 'task2', order: 1, table: '0' },
-          { id: 2, text: 'task3', order: 2, table: '0' },
-          { id: 3, text: 'task4', order: 3, table: '0' },
-          { id: 4, text: 'task5', order: 4, table: '0' },
-          { id: 5, text: 'task6', order: 5, table: '0' },
+          { id: 0, text: "task1", order: 0, table: "0" },
+          { id: 1, text: "task2", order: 1, table: "0" },
+          { id: 2, text: "task3", order: 2, table: "0" },
+          { id: 3, text: "task4", order: 3, table: "0" },
+          { id: 4, text: "task5", order: 4, table: "0" },
+          { id: 5, text: "task6", order: 5, table: "0" },
         ],
       },
       {
         id: 1,
-        tableTitle: 'Table Name',
+        tableTitle: "Table Name",
         tableContent: [
-          { id: 0, text: 'sooooomeeeeee task', order: 0, table: 'Table Name' },
-          { id: 2, text: 'sooooomeeeeee task', order: 1, table: 'Table Name' },
-          { id: 3, text: 'sooooomeeeeee task', order: 2, table: 'Table Name' },
+          {
+            id: 0,
+            text: "sooooomeeeeee task",
+            order: 0,
+            table: "Table Name",
+          },
+          {
+            id: 2,
+            text: "sooooomeeeeee task",
+            order: 1,
+            table: "Table Name",
+          },
+          {
+            id: 3,
+            text: "sooooomeeeeee task",
+            order: 2,
+            table: "Table Name",
+          },
         ],
       },
       {
         id: 2,
-        tableTitle: 'Table Name2',
-        tableContent: [{ id: 0, text: '', order: 0, table: 'Table Name2' }],
+        tableTitle: "Table Name2",
+        tableContent: [{ id: 0, text: "", order: 0, table: "Table Name2" }],
       },
     ],
     currentTask: null,
   };
 
-  onChangeInput = e => {
+  onChangeInput = (e) => {
     this.setState({ inputValue: e.target.value });
   };
 
@@ -54,21 +68,25 @@ class App extends React.Component {
       id: tables[0].tableContent.length,
       text: this.state.inputValue,
       order: tables[0].tableContent.length,
-      table: '0',
+      table: "0",
     };
     tables[0].tableContent.push(taskItem);
     this.setState({ tables });
-    this.setState({ inputValue: '' });
+    this.setState({ inputValue: "" });
     return null;
   };
 
-  changeTableName = e => {
+  changeTableName = (e) => {
     this.setState({ newTableName: e.target.value });
   };
 
   isUniqueTable = () =>
     this.state.tables
-      .map(table => table.tableTitle.toUpperCase() === this.state.newTableName.toUpperCase())
+      .map(
+        (table) =>
+          table.tableTitle.toUpperCase() ===
+          this.state.newTableName.toUpperCase()
+      )
       .includes(true);
 
   onCreateTable = () => {
@@ -77,19 +95,19 @@ class App extends React.Component {
     }
     if (this.isUniqueTable()) {
       // eslint-disable-next-line no-alert
-      alert('Unique table already exists');
+      alert("Unique table already exists");
       return null;
     }
     const newTable = {
       id: this.state.tables.length,
       tableTitle: this.state.newTableName,
-      tableContent: [{ id: 0, text: '', table: this.state.newTableName }],
+      tableContent: [{ id: 0, text: "", table: this.state.newTableName }],
     };
 
     const newTablesList = this.state.tables;
     newTablesList.push(newTable);
     this.setState({ tables: newTablesList });
-    this.setState({ newTableName: '' });
+    this.setState({ newTableName: "" });
     return null;
   };
 
@@ -97,23 +115,23 @@ class App extends React.Component {
     this.setState({ currentTask: task });
   };
 
-  dragEndHandler = e => {
-    e.target.style.background = 'rgba(204, 204, 204, 0.5)';
+  dragEndHandler = (e) => {
+    e.target.style.background = "rgba(204, 204, 204, 0.5)";
   };
 
-  dragLeaveHandler = e => {
-    e.target.style.background = 'rgba(204, 204, 204, 0.5)';
+  dragLeaveHandler = (e) => {
+    e.target.style.background = "rgba(204, 204, 204, 0.5)";
   };
 
-  dragOverHandler = e => {
+  dragOverHandler = (e) => {
     e.preventDefault();
-    e.target.style.background = '#ccc';
+    e.target.style.background = "#ccc";
   };
 
   dropHandler = (e, task) => {
     e.preventDefault();
     // console.log(task);
-    e.target.style.background = 'rgba(204, 204, 204, 0.5)';
+    e.target.style.background = "rgba(204, 204, 204, 0.5)";
     const { currentTask } = this.state;
     if (task.table !== currentTask.table) {
       const { tables } = this.state;
@@ -137,8 +155,11 @@ class App extends React.Component {
   addTask = (task, tables) => {
     const { currentTask } = this.state;
     currentTask.table = task.table;
-    const tableForChange = tables.find(el => el.tableTitle === currentTask.table).tableContent;
-    if (tableForChange[0].text === '') {
+    const tableForChange = tables.find(
+      (el) => el.tableTitle === currentTask.table
+    ).tableContent;
+
+    if (tableForChange[0].text === "") {
       tableForChange.pop();
       tableForChange.push(currentTask);
     } else {
@@ -146,33 +167,41 @@ class App extends React.Component {
     }
   };
 
-  removeTask = tables => {
+  removeTask = (tables) => {
     const { currentTask } = this.state;
 
-    const currentTable = tables.find(el => el.tableTitle === currentTask.table);
+    const currentTable = tables.find(
+      (el) => el.tableTitle === currentTask.table
+    );
     const indexOfTask = currentTable.tableContent.indexOf(currentTask);
 
     currentTable.tableContent.splice(indexOfTask, 1);
 
     if (currentTable.tableContent.length === 0) {
-      currentTable.tableContent.push({ id: 0, text: '', order: 0, table: currentTable.tableTitle });
+      currentTable.tableContent.push({
+        id: 0,
+        text: "",
+        order: 0,
+        table: currentTable.tableTitle,
+      });
     }
   };
 
   sortTable = () => {
     const { tables } = this.state;
-    tables.map(el => el.tableContent.sort((a, b) => a.order - b.order));
+    tables.map((el) => el.tableContent.sort((a, b) => a.order - b.order));
   };
 
   render() {
-    this.sortTable();
     return (
       <div className="tasks-container">
         <div className="tasks-container__creator">
-          <CreateTask
+          <CreateItem
             inputValue={this.state.inputValue}
-            onCreateTask={this.onCreateTask}
+            onCreateItem={this.onCreateTask}
             onChangeInput={this.onChangeInput}
+            title="Create Task"
+            buttonText="Create Task"
           />
           <TasksTable
             tasksList={this.state.tables[0]}
@@ -184,10 +213,12 @@ class App extends React.Component {
           />
         </div>
         <div className="task-tables">
-          <CreateTable
-            onCreateTable={this.onCreateTable}
-            tableName={this.state.newTableName}
-            changeTableName={this.changeTableName}
+          <CreateItem
+            onCreateItem={this.onCreateTable}
+            inputValue={this.state.newTableName}
+            onChangeInput={this.changeTableName}
+            title="Create Table"
+            buttonText="Create Table"
           />
           <UserTables
             tablesList={this.state.tables}
