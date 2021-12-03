@@ -7,40 +7,44 @@ import useInput from './hooks/useInput';
 import { fetchData, postTask } from './gateway/tasks.gateway';
 
 const App = () => {
-    const [data, setData] = React.useState([]);
-    const [tables, setTables] = React.useState([{
+    const initialTables = [{
         id: 0,
         tableTitle: '0',
         tableContent: [{ id: 0, text: '', table: '0', order: 0 }]
-    }]);
+    }];
+    const [tables, setTables] = React.useState(initialTables);
 
     const createTaskInput = useInput('');
     const createTableInput = useInput('');
     // const [currentTask, setCurrentTask] = React.useState(null);
 
-    const addTable = (newTable) => setTables([...tables, newTable]);
+    const addTable = (tableTitle = createTableInput.value) => setTables([...tables, {
+        id: tables.length,
+        tableTitle,
+        tableContent: [{ id: 0, text: '', table: createTableInput.value, order: 0 }]
+    }]);
 
     const addTaskToTable = task => {
-        for (let i = 0; i <= tables.length; i += 1) {
-            console.log('f');
-            if (tables[i].tableTitle === task.table) {
-                const currentTableContent = tables[i].tableContent
-                currentTableContent.push(task)
-                setTables([...tables])
-                return
+        let isUpdated = false;
+        const updatedTables = tables.map(table => {
+            if (table.tableTitle === task.table) {
+                table.tableContent.push(task)
+                isUpdated = true;
             }
-            addTable({
-                id: tables.length,
-                tableTitle: task.table,
-                tableContent: [{ ...task }]
-            })
-
+            return table
+        })
+        if (isUpdated) {
+            setTables(updatedTables);
         }
-
+        addTable();
     }
+
     const updateData = () => {
-        fetchData().then((response) => setData(response))
-        data.forEach(task => addTaskToTable(task))
+        fetchData().then((response) => {
+            setTables(initialTables);
+            response.forEach(task => addTaskToTable(task))
+        })
+
     };
 
 
@@ -58,8 +62,7 @@ const App = () => {
             table: '0',
         }
 
-        postTask(taskItem);
-        updateData();
+        postTask(taskItem).then(() => updateData())
     }
 
     const isUniqueTable = () =>
@@ -79,17 +82,11 @@ const App = () => {
             alert('This table already exists')
             // better to have dialog window for this one
         }
-        const newTable = {
-            id: tables.length,
-            tableTitle: createTableInput.value,
-            tableContent: [{ id: 0, text: '', table: createTableInput.value, order: 0 }]
-        }
+
         addTable(newTable);
         // postTable(newTable);
     }
 
-    console.log(data);
-    console.log(tables);
     return (
         <div className="tasks-container">
             <div className="tasks-container__creator">
